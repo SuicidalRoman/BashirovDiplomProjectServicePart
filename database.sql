@@ -37,6 +37,8 @@ CREATE TABLE requests(
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     request_title VARCHAR(250) NOT NULL,
+    event_title VARCHAR(250) NOT NULL,
+    event_type VARCHAR(10) DEFAULT 'conference' CHECK(event_type IN ('conference', 'exhibition')),
     
 )
 
