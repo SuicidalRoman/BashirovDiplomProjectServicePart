@@ -1,6 +1,6 @@
 import enum
 from datetime import datetime
-from sqlalchemy import Enum, MetaData, Table, Column, String, Integer, TIMESTAMP, ForeignKey, Date, CheckConstraint
+from sqlalchemy import Boolean, Enum, MetaData, Table, Column, String, Integer, TIMESTAMP, ForeignKey, Date, CheckConstraint
 
 
 metadata = MetaData()
@@ -25,7 +25,10 @@ users = Table(
     Column("user_id", Integer, primary_key=True),
     Column("user_login", String, unique=True, nullable=False),
     Column("hashed_password", String, nullable=False),
-    Column("user_status", Enum(UserStatus), nullable=False, default=UserStatus.CLIENT)
+    Column("user_status", Enum(UserStatus), nullable=False, default=UserStatus.CLIENT),
+    Column("is_active", Boolean, default=True, nullable=False),
+    Column("is_superuser", Boolean, default=False, nullable=False),
+    Column("is_verified", Boolean, default=False, nullable=False)
 )
 
 profiles = Table(

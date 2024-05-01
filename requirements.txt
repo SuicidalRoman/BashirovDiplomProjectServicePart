@@ -2,6 +2,7 @@ alembic
 asyncpg
 sqlalchemy
 fastapi
+fastapi-users[sqlalchemy]
 pydantic
 pydantic-settings
 psycopg2-binary

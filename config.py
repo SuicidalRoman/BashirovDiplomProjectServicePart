@@ -8,3 +8,6 @@ DATABASE_PORT=os.environ.get("DATABASE_PORT")
 DATABASE_USER=os.environ.get("DATABASE_USER")
 DATABASE_PASSWORD=os.environ.get("DATABASE_PASSWORD")
 DATABASE_NAME=os.environ.get("DATABASE_NAME")
+
+SECRET_PHRASE=os.environ.get("SECRET_PHRASE")
+SECRET_KEY=os.environ.get("SECRET_KEY")
