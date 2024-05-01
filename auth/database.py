@@ -21,7 +21,7 @@ class User(SQLAlchemyBaseUserTable[int], Base):
 
 
     id: int = Column("user_id", Integer, primary_key=True)
-    user_login: str = Column(String(length=320), unique=True, index=True, nullable=False)
+    email: str = Column("user_login", String(length=320), unique=True, index=True, nullable=False)
     hashed_password: str = Column(String(length=1024), nullable=False)
     user_status: UserStatus = Column("user_status", Enum(UserStatus), nullable=False, default=UserStatus.CLIENT)
     is_active: bool = Column(Boolean, default=True, nullable=False)

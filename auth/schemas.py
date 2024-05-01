@@ -5,7 +5,7 @@ from Database.models import UserStatus
 
 class UserRead(schemas.BaseUser[int]):
     id: int
-    user_login: str
+    email: str
     user_status: UserStatus
     is_active: bool = True
     is_superuser: bool = False
@@ -13,8 +13,8 @@ class UserRead(schemas.BaseUser[int]):
 
 
 class UserCreate(schemas.BaseUserCreate):
-    user_login: str
-    hashed_password: str
+    email: str
+    password: str
     user_status: UserStatus = UserStatus.CLIENT
     is_active: bool = True
     is_superuser: bool = False
@@ -22,8 +22,8 @@ class UserCreate(schemas.BaseUserCreate):
 
 
 class UserUpdate(schemas.BaseUserUpdate):
-    user_login: str
-    hashed_password: str
+    email: str
+    password: str
     user_status: UserStatus
     is_active: bool = True
     is_superuser: bool = False
