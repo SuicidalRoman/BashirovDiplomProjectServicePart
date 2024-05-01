@@ -1,6 +1,8 @@
+alembic
 asyncpg
 sqlalchemy
 fastapi
 pydantic
 pydantic-settings
+psycopg2-binary
 uvicorn
