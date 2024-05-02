@@ -26,6 +26,8 @@ users = Table(
     Column("user_login", String, unique=True, nullable=False),
     Column("hashed_password", String, nullable=False),
     Column("user_status", Enum(UserStatus), nullable=False, default=UserStatus.CLIENT),
+    Column("registered_at", TIMESTAMP, default=datetime.utcnow),
+    Column("updated_at", TIMESTAMP, default=datetime.utcnow),
     Column("is_active", Boolean, default=True, nullable=False),
     Column("is_superuser", Boolean, default=False, nullable=False),
     Column("is_verified", Boolean, default=False, nullable=False)

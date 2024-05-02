@@ -1,9 +1,13 @@
+import subprocess
 from fastapi import FastAPI
 from fastapi_users import FastAPIUsers
 from auth.auth import auth_backend
 from auth.database import User
 from auth.manager import get_user_manager
-from auth.schemas import UserCreate, UserRead
+from auth.schemas import UserCreate, UserRead, UserUpdate
+
+from profiles_router import router as profile_router
+from requests_router import router as request_router
 
 
 fastapi_users = FastAPIUsers[User, int](
@@ -30,6 +34,16 @@ app.include_router(
     tags=["auth"],
 )
 
+app.include_router(
+    fastapi_users.get_users_router(UserRead, UserUpdate, requires_verification=False),
+    prefix="/users",
+    tags=["users"],
+)
+
+app.include_router(router=profile_router)
+
+app.include_router(router=request_router)
+
 @app.get(path="/")
 def main():
     return "Hello World!"
@@ -37,4 +51,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    subprocess.run(["uvicorn", "main:app", "--reload"])

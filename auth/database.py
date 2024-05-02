@@ -1,10 +1,11 @@
 
+from datetime import datetime
 from typing import AsyncGenerator
 
 from fastapi import Depends
 from fastapi_users.db import SQLAlchemyBaseUserTableUUID, SQLAlchemyUserDatabase
 from fastapi_users_db_sqlalchemy import SQLAlchemyBaseUserTable
-from sqlalchemy import Column, Enum, String, Integer, Boolean
+from sqlalchemy import Column, Enum, String, Integer, Boolean, TIMESTAMP
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.ext.declarative import DeclarativeMeta, declarative_base
 from sqlalchemy.orm import sessionmaker
@@ -24,6 +25,8 @@ class User(SQLAlchemyBaseUserTable[int], Base):
     email: str = Column("user_login", String(length=320), unique=True, index=True, nullable=False)
     hashed_password: str = Column(String(length=1024), nullable=False)
     user_status: UserStatus = Column("user_status", Enum(UserStatus), nullable=False, default=UserStatus.CLIENT)
+    registered_at: TIMESTAMP = Column("registered_at", TIMESTAMP, default=datetime.utcnow)
+    updated_at: TIMESTAMP = Column("updated_at", TIMESTAMP, default=datetime.utcnow)
     is_active: bool = Column(Boolean, default=True, nullable=False)
     is_superuser: bool = Column(Boolean, default=False, nullable=False)
     is_verified: bool = Column(Boolean, default=False, nullable=False)
