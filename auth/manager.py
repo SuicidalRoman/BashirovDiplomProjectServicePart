@@ -2,10 +2,12 @@ from typing import Optional
 from datetime import datetime
 
 from fastapi import Depends, Request
-from fastapi_users import BaseUserManager, IntegerIDMixin, models, schemas, exceptions
+from fastapi_users import BaseUserManager, FastAPIUsers, IntegerIDMixin, models, schemas, exceptions
 
 from auth.database import User, get_user_db
 from config import SECRET_KEY
+
+from auth.auth import auth_backend
 
 
 class UserManager(IntegerIDMixin, BaseUserManager[User, int]):
@@ -89,3 +91,8 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, int]):
 
 async def get_user_manager(user_db=Depends(get_user_db)):
     yield UserManager(user_db)
+
+
+
+fastapi_users = FastAPIUsers[User, int](get_user_manager, [auth_backend])
+current_user = fastapi_users.current_user()

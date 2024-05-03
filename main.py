@@ -7,7 +7,7 @@ from auth.manager import get_user_manager
 from auth.schemas import UserCreate, UserRead, UserUpdate
 
 from profiles_router import router as profile_router
-from requests_router import router as request_router
+from requests.requests_router import router as request_router
 
 
 fastapi_users = FastAPIUsers[User, int](
