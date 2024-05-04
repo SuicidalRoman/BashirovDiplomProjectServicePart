@@ -4,10 +4,10 @@ from datetime import datetime
 from fastapi import Depends, Request
 from fastapi_users import BaseUserManager, FastAPIUsers, IntegerIDMixin, models, schemas, exceptions
 
-from auth.database import User, get_user_db
-from config import SECRET_KEY
+from src.auth.database import User, get_user_db
+from src.config import SECRET_KEY
 
-from auth.auth import auth_backend
+from src.auth.auth import auth_backend
 
 
 class UserManager(IntegerIDMixin, BaseUserManager[User, int]):

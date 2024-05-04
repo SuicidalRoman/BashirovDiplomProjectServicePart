@@ -1,5 +1,5 @@
 from fastapi_users.authentication import  CookieTransport, JWTStrategy, AuthenticationBackend
-from config import SECRET_PHRASE
+from src.config import SECRET_PHRASE
 
 
 cookie_transport = CookieTransport(

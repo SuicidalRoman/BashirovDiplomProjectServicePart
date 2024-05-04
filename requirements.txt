@@ -3,7 +3,10 @@ asyncpg
 sqlalchemy
 fastapi
 fastapi-users[sqlalchemy]
+httpx
 pydantic
 pydantic-settings
+pytest
+pytest-asyncio
 psycopg2-binary
 uvicorn

@@ -1,6 +1,6 @@
 from datetime import datetime
 from fastapi_users import schemas
-from Database.models import UserStatus
+from src.Database.models import UserStatus
 
 
 class UserRead(schemas.BaseUser[int]):

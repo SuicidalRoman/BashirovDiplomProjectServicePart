@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 from datetime import datetime
 
-from Database.models import EventType
+from src.Database.models import EventType
 
 class RequestRead(BaseModel):
     id: int
