@@ -15,7 +15,7 @@ router = APIRouter(
 
 
 
-@router.get("/")
+@router.get("/all")
 async def get_all_requests(session: AsyncSession = Depends(get_async_session)):
     """Fetch all requests"""
     query = select(requests)
@@ -31,7 +31,7 @@ async def get_my_requests(
     result = await session.execute(query)
     return result.all()
 
-@router.post("/me")
+@router.post("/me/create")
 async def create_request(
     new_request: RequestCreate,
     current_user: User = Depends(current_user), 
@@ -40,6 +40,7 @@ async def create_request(
     """Create a new request"""
     new_request.user_id = current_user.id
     statement = insert(requests).values(**new_request.dict())
-    result = await session.execute(statement)
-    return result
+    await session.execute(statement)
+    await session.commit()
+    return {"status": "200"}
 

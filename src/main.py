@@ -1,10 +1,12 @@
 import subprocess
+import ssl
 from fastapi import FastAPI
 from fastapi_users import FastAPIUsers
 from src.auth.auth import auth_backend
 from src.auth.database import User
 from src.auth.manager import get_user_manager
 from src.auth.schemas import UserCreate, UserRead, UserUpdate
+from starlette.middleware.httpsredirect import HTTPSRedirectMiddleware
 
 from src.profiles.profiles_router import router as profile_router
 from src.requests.requests_router import router as request_router
@@ -16,11 +18,23 @@ fastapi_users = FastAPIUsers[User, int](
 )
 
 
+ssl_cert_file = "server.crt"
+ssl_key_file = "server.key"
+
+context = ssl.create_default_context(ssl.Purpose.CLIENT_AUTH)
+context.load_cert_chain(
+    certfile=ssl_cert_file,
+    keyfile=ssl_key_file
+)
+
+
 app = FastAPI(
     title="📱 Requests App Service",
     description="The service part of the diploma project by Ramil Bashirov",
     version="0.1.0"
 )
+
+app.add_middleware(HTTPSRedirectMiddleware)
 
 app.include_router(
     fastapi_users.get_auth_router(auth_backend),
