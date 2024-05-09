@@ -16,6 +16,13 @@ class ProfileRead(BaseModel):
     birthdate: date
     phone: str
 
+    class Config:
+        orm_mode=True
+        from_attributes=True
+        json_encoders = {
+            datetime: lambda v: v.isoformat()
+        }
+
 class ProfileCreate(BaseModel):
     user_id: int
     registered_at: datetime = datetime.utcnow()

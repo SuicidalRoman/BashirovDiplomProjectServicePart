@@ -49,7 +49,7 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, int]):
         user_dict["hashed_password"] = self.password_helper.hash(password)
         
         """Custom"""
-        user_dict["created_at"] = datetime.utcnow()
+        user_dict["registered_at"] = datetime.utcnow()
         user_dict["updated_at"] = datetime.utcnow()
  
         created_user = await self.user_db.create(user_dict)
