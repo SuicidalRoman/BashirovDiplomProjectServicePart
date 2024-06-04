@@ -11,20 +11,18 @@ from starlette.middleware.httpsredirect import HTTPSRedirectMiddleware
 from src.profiles.profiles_router import router as profile_router
 from src.requests.requests_router import router as request_router
 
+from src.config import SSL_KEY_FILE_PATH, SSL_CERT_FILE_PATH
+
 
 fastapi_users = FastAPIUsers[User, int](
     get_user_manager,
     [auth_backend]
 )
 
-
-ssl_cert_file = "server.crt"
-ssl_key_file = "server.key"
-
 context = ssl.create_default_context(ssl.Purpose.CLIENT_AUTH)
 context.load_cert_chain(
-    certfile=ssl_cert_file,
-    keyfile=ssl_key_file
+    certfile=SSL_CERT_FILE_PATH,
+    keyfile=SSL_KEY_FILE_PATH
 )
 
 
@@ -61,7 +59,6 @@ app.include_router(router=request_router)
 @app.get(path="/")
 def main():
     return "Hello World!"
-
 
 
 if __name__ == "__main__":
