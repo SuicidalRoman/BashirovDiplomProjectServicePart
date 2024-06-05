@@ -10,6 +10,7 @@ from starlette.middleware.httpsredirect import HTTPSRedirectMiddleware
 
 from src.profiles.profiles_router import router as profile_router
 from src.requests.requests_router import router as request_router
+from src.events.events_router import router as events_router
 
 from src.config import SSL_KEY_FILE_PATH, SSL_CERT_FILE_PATH
 
@@ -50,6 +51,10 @@ app.include_router(
     fastapi_users.get_users_router(UserRead, UserUpdate, requires_verification=False),
     prefix="/users",
     tags=["users"],
+)
+
+app.include_router(
+    router=events_router
 )
 
 app.include_router(router=profile_router)

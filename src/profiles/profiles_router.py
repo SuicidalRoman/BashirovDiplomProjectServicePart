@@ -1,9 +1,10 @@
+import datetime
 from typing import List
 from fastapi import APIRouter, Depends
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, insert
+from sqlalchemy import select, insert, update
 
 from src.auth.database import get_async_session, User
 from src.Database.models import profiles
@@ -88,3 +89,37 @@ async def create_new_profile(
     await session.execute(statement=statement)
     await session.commit()
     return {"status": "200"}
+
+
+@router.post("/me/update", response_model=ProfileRead)
+async def update_my_profile(
+    profile_update: ProfileUpdate,
+    session: AsyncSession = Depends(get_async_session),
+    current_user: User = Depends(current_user)
+):
+    query = select(profiles).where(profiles.c.user_id == current_user.id)
+    result = await session.execute(query)
+    profile_data = result.first()
+
+    if not profile_data:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Profile not found")
+
+    update_data = profile_update.dict(exclude_unset=True)
+    update_data["updated_at"] = datetime.datetime.utcnow()
+    # update_data["registered_at"] = datetime.datetime.utcnow()
+
+    update_stmt = (
+        update(profiles)
+        .where(profiles.c.user_id == current_user.id)
+        .values(**update_data)
+        .returning(profiles)
+    )
+
+    result = await session.execute(update_stmt)
+    await session.commit()
+
+    updated_profile = result.first()
+    updated_profile_dict = dict(zip(result.keys(), updated_profile))
+    updated_profile_dict["id"] = updated_profile_dict.pop("profile_id")
+
+    return ProfileRead(**updated_profile_dict)

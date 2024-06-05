@@ -49,8 +49,8 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, int]):
         user_dict["hashed_password"] = self.password_helper.hash(password)
         
         """Custom"""
-        user_dict["registered_at"] = datetime.utcnow()
-        user_dict["updated_at"] = datetime.utcnow()
+        # user_dict["registered_at"] = datetime.utcnow()
+        # user_dict["updated_at"] = datetime.utcnow()
  
         created_user = await self.user_db.create(user_dict)
 
@@ -71,7 +71,7 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, int]):
             updated_user_data = user_update.create_update_dict_superuser()
 
         """Custom"""
-        updated_user_data["updated_at"] = datetime.utcnow()
+        # updated_user_data["updated_at"] = datetime.utcnow()
         updated_user_data = self.clean_dict(updated_user_data)
 
         updated_user = await self._update(user, updated_user_data)

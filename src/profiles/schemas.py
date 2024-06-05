@@ -1,8 +1,6 @@
 from pydantic import BaseModel
 from datetime import datetime, date
-
 from src.Database.models import ProfileType
-
 
 class ProfileRead(BaseModel):
     id: int
@@ -17,16 +15,14 @@ class ProfileRead(BaseModel):
     phone: str
 
     class Config:
-        orm_mode=True
-        from_attributes=True
+        orm_mode = True
+        from_attributes = True
         json_encoders = {
             datetime: lambda v: v.isoformat()
         }
 
 class ProfileCreate(BaseModel):
     user_id: int
-    registered_at: datetime = datetime.utcnow()
-    updated_at: datetime = datetime.utcnow()
     profile_type: ProfileType = ProfileType.INDIVIDUAL
     surname: str
     firstname: str
@@ -35,8 +31,6 @@ class ProfileCreate(BaseModel):
     phone: str
 
 class ProfileUpdate(BaseModel):
-    user_id: int
-    updated_at: datetime = datetime.utcnow()
     profile_type: ProfileType = ProfileType.INDIVIDUAL
     surname: str
     firstname: str
