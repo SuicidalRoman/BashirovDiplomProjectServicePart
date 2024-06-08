@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi_cache.decorator import cache
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy import update, insert, text
@@ -14,7 +15,9 @@ router = APIRouter(
     tags=["Events"]
 )
 
+
 @router.get("/", response_model=List[EventRead])
+@cache(expire=60)
 async def get_all_events(session: AsyncSession = Depends(get_async_session)):
     query = select(events)
     result = await session.execute(query)
@@ -26,7 +29,9 @@ async def get_all_events(session: AsyncSession = Depends(get_async_session)):
     
     return [EventRead(**event_dict) for event_dict in events_dicts]
 
+
 @router.get("/{event_id}", response_model=EventRead)
+@cache(expire=60)
 async def get_specific_event(event_id: int, session: AsyncSession = Depends(get_async_session)):
     query = select(events).where(events.c.event_id == event_id)
     result = await session.execute(query)
@@ -39,6 +44,7 @@ async def get_specific_event(event_id: int, session: AsyncSession = Depends(get_
     event_dict["id"] = event_dict.pop("event_id")
 
     return EventRead(**event_dict)
+
 
 @router.post("/", status_code=status.HTTP_201_CREATED, response_model=EventRead)
 async def create_new_event(

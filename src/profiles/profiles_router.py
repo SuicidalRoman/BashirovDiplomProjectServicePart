@@ -1,6 +1,7 @@
 import datetime
 from typing import List
 from fastapi import APIRouter, Depends
+from fastapi_cache.decorator import cache
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -17,11 +18,15 @@ router = APIRouter(
     tags=["Profiles"]
 )
 
+
 @router.get("/me")
+@cache(expire=60)
 async def get_my_profile(session: AsyncSession = Depends(get_async_session),
                          current_user: User = Depends(current_user)):
+
     query = select(profiles).where(profiles.c.user_id == current_user.id)
     result = await session.execute(query)
+    
     profile_data = result.first()
 
     if not profile_data:
@@ -33,6 +38,7 @@ async def get_my_profile(session: AsyncSession = Depends(get_async_session),
 
 
 @router.get("/all", response_model=List[ProfileRead])
+@cache(expire=60)
 async def get_all_profiles(session: AsyncSession = Depends(get_async_session)):
     """Admins may want to get all profiles"""
     query = select(profiles)
@@ -60,7 +66,9 @@ async def get_all_profiles(session: AsyncSession = Depends(get_async_session)):
     except Exception as e:
         return {"Error": f"{e}"}
 
+
 @router.get("/{profile_id}")
+@cache(expire=60)
 async def get_specific_profile(profile_id: int, session: AsyncSession = Depends(get_async_session)):
     query = select(profiles).where(profiles.c.profile_id == profile_id)
 

@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi_cache.decorator import cache
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, insert, update
 from typing import List
@@ -16,9 +17,8 @@ router = APIRouter(
 )
 
 
-
-
 @router.get("/me", response_model=List[RequestRead])
+@cache(expire=60)
 async def get_my_requests(
     session: AsyncSession = Depends(get_async_session),
     current_user: User = Depends(current_user)
@@ -46,7 +46,9 @@ async def get_my_requests(
 
     return [RequestRead(**request_dict) for request_dict in requests_dicts]
 
+
 @router.get("/{request_id}", response_model=RequestRead)
+@cache(expire=60)
 async def get_specific_request(request_id: int, session: AsyncSession = Depends(get_async_session)):
     query = (
         select(requests, events)
